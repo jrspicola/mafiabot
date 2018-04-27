@@ -1,0 +1,25 @@
+version: '3.0'
+
+services:
+  runner:
+    environment:
+      - C_FORCE_ROOT=true
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    links:
+      - db
+    volumes:
+      - .:/mafia/apprunner/mafiabot
+
+  db:
+    image: mysql:5.7
+    hostname: db
+    volumes:
+      - ./docker/data/init.sql:/docker-entrypoint-initdb.d/init.sql
+    ports:
+      - "3308:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_USER: root
+      MYSQL_DATABASE: test
